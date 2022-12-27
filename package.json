@@ -1,0 +1,27 @@
+{
+  "name": "hephaestus-cli",
+  "version": "1.0.0",
+  "description": "Communicate with ChatGPT and DALL-E right through your terminal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Suyash-Purwar/Hephaestus-cli.git"
+  },
+  "keywords": [
+    "ChatGPT",
+    "OpenAI",
+    "DALL-E",
+    "AI",
+    "Terminal",
+    "CLI"
+  ],
+  "author": "Suyash Purwar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Suyash-Purwar/Hephaestus-cli/issues"
+  },
+  "homepage": "https://github.com/Suyash-Purwar/Hephaestus-cli#readme"
+}
