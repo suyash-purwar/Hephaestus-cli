@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const CommandHandler_1 = require("./CommandHandler");
-const args = [...process.argv.slice(2)];
+const CommandValidator_1 = require("./CommandValidator");
 try {
-    const executable = CommandHandler_1.CommandHandler.checkCommand(args);
+    const executable = CommandValidator_1.CommandValidator.validateCommand();
     console.log(executable);
 }
 catch (e) {
@@ -14,4 +13,3 @@ catch (e) {
     if (e.unknownCommand)
         console.log(e.unknownCommand);
 }
-console.log(args);
