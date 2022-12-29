@@ -4,6 +4,7 @@ exports.CommandHandler = void 0;
 const CommandError_1 = require("./errors/CommandError");
 class CommandHandler {
     static checkCommand(args) {
+        var _a, _b;
         const executable = {
             command: args[0],
         };
@@ -49,16 +50,31 @@ class CommandHandler {
                 if (args.length > 2) {
                     throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[2]);
                 }
-                if (args[1].trim() === '') {
-                    throw new CommandError_1.CommandError('QUERY_NOT_PASSED', 'answer');
+                if (!((_a = args[1]) === null || _a === void 0 ? void 0 : _a.trim())) {
+                    throw new CommandError_1.CommandError('EMPTY_QUERY', 'answer');
                 }
                 if (HELP_COMMAND_TYPES.includes(args[1])) {
                     executable.describe = true;
                 }
                 else {
-                    executable.query = args[1];
+                    executable.data = args[1];
                 }
                 executable.command = 'answer';
+                break;
+            case 'set-token':
+            case '-st':
+                if (args.length > 2) {
+                    throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'set-token', args[2]);
+                }
+                if (!((_b = args[1]) === null || _b === void 0 ? void 0 : _b.trim())) {
+                    throw new CommandError_1.CommandError('API_TOKEN_EMPTY', 'set-token');
+                }
+                if (HELP_COMMAND_TYPES.includes(args[1])) {
+                    executable.describe = true;
+                }
+                else {
+                    executable.data = args[1];
+                }
                 break;
             default:
                 throw new CommandError_1.CommandError('UNKNOWN_COMMAND', undefined, args[1]);

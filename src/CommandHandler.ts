@@ -2,7 +2,7 @@ import { CommandError } from './errors/CommandError';
 
 interface Executable {
   command: string;
-  query?: string;
+  data?: string;
   describe?: boolean;
 }
 
@@ -51,15 +51,29 @@ export class CommandHandler {
         if (args.length > 2) {
           throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[2]);
         }
-        if (args[1].trim() === '') {
-          throw new CommandError('QUERY_NOT_PASSED', 'answer');
+        if (!args[1]?.trim()) {
+          throw new CommandError('EMPTY_QUERY', 'answer');
         }
         if (HELP_COMMAND_TYPES.includes(args[1])) {
           executable.describe = true;
         } else {
-          executable.query = args[1];
+          executable.data = args[1];
         }
         executable.command = 'answer';
+        break;
+      case 'set-token':
+      case '-st':
+        if (args.length > 2) {
+          throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'set-token', args[2]);
+        }
+        if (!args[1]?.trim()) {
+          throw new CommandError('API_TOKEN_EMPTY', 'set-token');
+        }
+        if (HELP_COMMAND_TYPES.includes(args[1])) {
+          executable.describe = true;
+        } else {
+          executable.data = args[1];
+        }
         break;
       default:
         throw new CommandError('UNKNOWN_COMMAND', undefined, args[1]);
