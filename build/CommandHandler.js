@@ -4,7 +4,7 @@ exports.CommandHandler = void 0;
 const CommandError_1 = require("./errors/CommandError");
 class CommandHandler {
     static checkCommand(args) {
-        var _a, _b;
+        var _a, _b, _c, _d;
         const executable = {
             command: args[0],
         };
@@ -57,7 +57,9 @@ class CommandHandler {
                     executable.describe = true;
                 }
                 else {
-                    executable.data = args[1];
+                    executable.data = {
+                        query: args[1],
+                    };
                 }
                 executable.command = 'answer';
                 break;
@@ -73,8 +75,32 @@ class CommandHandler {
                     executable.describe = true;
                 }
                 else {
-                    executable.data = args[1];
+                    executable.data = {
+                        query: args[1],
+                    };
                 }
+                executable.command = 'set-token';
+                break;
+            case 'generate':
+            case '-g':
+                if (args.length > 3)
+                    throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'generate', args[2]);
+                if (!((_c = args[1]) === null || _c === void 0 ? void 0 : _c.trim())) {
+                    throw new CommandError_1.CommandError('ENCOUNTER_LESSER_ARGS', 'generate');
+                }
+                executable.data = {
+                    query: args[1],
+                };
+                if (+((_d = args[2]) === null || _d === void 0 ? void 0 : _d.trim())) {
+                    if (+args[2] > 10)
+                        throw new CommandError_1.CommandError('EXCEED_IMG_GEN_LIMIT', 'generate');
+                    executable.data.count = +args[2];
+                }
+                else {
+                    if (args[2] != undefined)
+                        throw new CommandError_1.CommandError('ENCOUNTERED_NON_NUMERIC_VALUE', 'generate');
+                }
+                executable.command = 'generate';
                 break;
             default:
                 throw new CommandError_1.CommandError('UNKNOWN_COMMAND', undefined, args[1]);

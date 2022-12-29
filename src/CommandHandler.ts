@@ -2,7 +2,10 @@ import { CommandError } from './errors/CommandError';
 
 interface Executable {
   command: string;
-  data?: string;
+  data?: {
+    query: string;
+    count?: number;
+  };
   describe?: boolean;
 }
 
@@ -57,7 +60,9 @@ export class CommandHandler {
         if (HELP_COMMAND_TYPES.includes(args[1])) {
           executable.describe = true;
         } else {
-          executable.data = args[1];
+          executable.data = {
+            query: args[1],
+          };
         }
         executable.command = 'answer';
         break;
@@ -72,8 +77,31 @@ export class CommandHandler {
         if (HELP_COMMAND_TYPES.includes(args[1])) {
           executable.describe = true;
         } else {
-          executable.data = args[1];
+          executable.data = {
+            query: args[1],
+          };
         }
+        executable.command = 'set-token';
+        break;
+      case 'generate':
+      case '-g':
+        if (args.length > 3)
+          throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'generate', args[2]);
+        if (!args[1]?.trim()) {
+          throw new CommandError('ENCOUNTER_LESSER_ARGS', 'generate');
+        }
+        executable.data = {
+          query: args[1],
+        };
+        if (+args[2]?.trim()) {
+          if (+args[2] > 10)
+            throw new CommandError('EXCEED_IMG_GEN_LIMIT', 'generate');
+          executable.data.count = +args[2];
+        } else {
+          if (args[2] != undefined)
+            throw new CommandError('ENCOUNTERED_NON_NUMERIC_VALUE', 'generate');
+        }
+        executable.command = 'generate';
         break;
       default:
         throw new CommandError('UNKNOWN_COMMAND', undefined, args[1]);
