@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
 import { CommandValidator } from './CommandValidator';
+import { ResponseHandler } from './ResponseHandler';
 
 try {
   const executable = CommandValidator.validateCommand();
-  console.log(executable);
+  // console.log(executable);
+  const response = ResponseHandler.routeExecutable(executable);
+  console.log(response);
 } catch (e: any) {
   console.log(e.name);
   console.log(e.message);

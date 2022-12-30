@@ -1,13 +1,5 @@
 import { CommandError } from './errors/CommandError';
-
-interface Executable {
-  command: string;
-  data?: {
-    query: string;
-    count?: number;
-  };
-  describe?: boolean;
-}
+import { Executable } from './interfaces/Executable';
 
 export class CommandValidator {
   private constructor() {}
@@ -18,11 +10,9 @@ export class CommandValidator {
     command: CommandValidator._args[0],
   };
 
-  static validateCommand(): Executable {
+  static validateCommand(): Executable | never {
     switch (CommandValidator._executable.command) {
       case undefined:
-      case 'usage':
-      case '-u':
       case 'help':
       case '-h':
         CommandValidator.validateHelpCommand();
@@ -46,6 +36,10 @@ export class CommandValidator {
       case 'generate':
       case '-g':
         CommandValidator.validateGenerateCommand();
+        break;
+      case 'configure':
+      case '-c':
+        CommandValidator.validateConfigureCommand();
         break;
       default:
         throw new CommandError(
@@ -163,5 +157,21 @@ export class CommandValidator {
       }
     }
     exec.command = 'generate';
+  }
+
+  static validateConfigureCommand(): void | never {
+    const exec = CommandValidator._executable;
+    const args = CommandValidator._args;
+    if (args.length > 2) {
+      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'configure', args[1]);
+    }
+    if (args.length != 1) {
+      if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
+        exec.describe = true;
+      } else {
+        throw new CommandError('UNKNOWN_COMMAND', 'configure', args[1]);
+      }
+    }
+    exec.command = 'configure';
   }
 }

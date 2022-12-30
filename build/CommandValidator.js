@@ -7,8 +7,6 @@ class CommandValidator {
     static validateCommand() {
         switch (CommandValidator._executable.command) {
             case undefined:
-            case 'usage':
-            case '-u':
             case 'help':
             case '-h':
                 CommandValidator.validateHelpCommand();
@@ -32,6 +30,10 @@ class CommandValidator {
             case 'generate':
             case '-g':
                 CommandValidator.validateGenerateCommand();
+                break;
+            case 'configure':
+            case '-c':
+                CommandValidator.validateConfigureCommand();
                 break;
             default:
                 throw new CommandError_1.CommandError('UNKNOWN_COMMAND', undefined, CommandValidator._args[1]);
@@ -148,6 +150,22 @@ class CommandValidator {
             }
         }
         exec.command = 'generate';
+    }
+    static validateConfigureCommand() {
+        const exec = CommandValidator._executable;
+        const args = CommandValidator._args;
+        if (args.length > 2) {
+            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'configure', args[1]);
+        }
+        if (args.length != 1) {
+            if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
+                exec.describe = true;
+            }
+            else {
+                throw new CommandError_1.CommandError('UNKNOWN_COMMAND', 'configure', args[1]);
+            }
+        }
+        exec.command = 'configure';
     }
 }
 exports.CommandValidator = CommandValidator;
