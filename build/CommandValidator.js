@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CommandValidator = void 0;
-const CommandError_1 = require("./errors/CommandError");
-class CommandValidator {
+import { CommandError } from './errors/CommandError.js';
+export class CommandValidator {
     constructor() { }
     static validateCommand() {
         switch (CommandValidator._executable.command) {
@@ -36,7 +33,7 @@ class CommandValidator {
                 CommandValidator.validateConfigureCommand();
                 break;
             default:
-                throw new CommandError_1.CommandError('UNKNOWN_COMMAND', undefined, CommandValidator._args[1]);
+                throw new CommandError('UNKNOWN_COMMAND', undefined, CommandValidator._args[1]);
         }
         return CommandValidator._executable;
     }
@@ -44,7 +41,7 @@ class CommandValidator {
         const exec = CommandValidator._executable;
         const args = CommandValidator._args;
         if (args.length > 1) {
-            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'help', args[1]);
+            throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'help', args[1]);
         }
         exec.command = 'help';
     }
@@ -52,14 +49,14 @@ class CommandValidator {
         const exec = CommandValidator._executable;
         const args = CommandValidator._args;
         if (args.length > 2) {
-            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[1]);
+            throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[1]);
         }
         if (args.length != 1) {
             if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
                 exec.describe = true;
             }
             else {
-                throw new CommandError_1.CommandError('UNKNOWN_COMMAND', 'about', args[1]);
+                throw new CommandError('UNKNOWN_COMMAND', 'about', args[1]);
             }
         }
         exec.command = 'about';
@@ -68,14 +65,14 @@ class CommandValidator {
         const exec = CommandValidator._executable;
         const args = CommandValidator._args;
         if (args.length > 2) {
-            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'version', args[1]);
+            throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'version', args[1]);
         }
         if (args.length != 1) {
             if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
                 exec.describe = true;
             }
             else {
-                throw new CommandError_1.CommandError('UNKNOWN_COMMAND', 'version', args[1]);
+                throw new CommandError('UNKNOWN_COMMAND', 'version', args[1]);
             }
         }
         exec.command = 'version';
@@ -85,10 +82,10 @@ class CommandValidator {
         const exec = CommandValidator._executable;
         const args = CommandValidator._args;
         if (args.length > 2) {
-            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[2]);
+            throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[2]);
         }
         if (!((_a = args[1]) === null || _a === void 0 ? void 0 : _a.trim())) {
-            throw new CommandError_1.CommandError('EMPTY_QUERY', 'answer');
+            throw new CommandError('EMPTY_QUERY', 'answer');
         }
         if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
             exec.describe = true;
@@ -105,10 +102,10 @@ class CommandValidator {
         const exec = CommandValidator._executable;
         const args = CommandValidator._args;
         if (args.length > 2) {
-            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'set-token', args[2]);
+            throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'set-token', args[2]);
         }
         if (!((_a = args[1]) === null || _a === void 0 ? void 0 : _a.trim())) {
-            throw new CommandError_1.CommandError('API_TOKEN_EMPTY', 'set-token');
+            throw new CommandError('API_TOKEN_EMPTY', 'set-token');
         }
         if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
             exec.describe = true;
@@ -125,10 +122,10 @@ class CommandValidator {
         const exec = CommandValidator._executable;
         const args = CommandValidator._args;
         if (args.length > 3) {
-            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'generate', args[3]);
+            throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'generate', args[3]);
         }
         if (!((_a = args[1]) === null || _a === void 0 ? void 0 : _a.trim())) {
-            throw new CommandError_1.CommandError('ENCOUNTER_LESSER_ARGS', 'generate');
+            throw new CommandError('ENCOUNTER_LESSER_ARGS', 'generate');
         }
         if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
             exec.describe = true;
@@ -139,13 +136,13 @@ class CommandValidator {
             };
             if (+((_b = args[2]) === null || _b === void 0 ? void 0 : _b.trim())) {
                 if (+args[2] > 10 || +args[2] < 0) {
-                    throw new CommandError_1.CommandError('OUT_OF_IMG_GEN_LIMIT', 'generate');
+                    throw new CommandError('OUT_OF_IMG_GEN_LIMIT', 'generate');
                 }
                 exec.data.count = +args[2];
             }
             else {
                 if (args[2] != undefined) {
-                    throw new CommandError_1.CommandError('ENCOUNTERED_NON_NUMERIC_VALUE', 'generate');
+                    throw new CommandError('ENCOUNTERED_NON_NUMERIC_VALUE', 'generate');
                 }
             }
         }
@@ -155,20 +152,19 @@ class CommandValidator {
         const exec = CommandValidator._executable;
         const args = CommandValidator._args;
         if (args.length > 2) {
-            throw new CommandError_1.CommandError('ENCOUNTER_EXTRA_ARGS', 'configure', args[1]);
+            throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'configure', args[1]);
         }
         if (args.length != 1) {
             if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
                 exec.describe = true;
             }
             else {
-                throw new CommandError_1.CommandError('UNKNOWN_COMMAND', 'configure', args[1]);
+                throw new CommandError('UNKNOWN_COMMAND', 'configure', args[1]);
             }
         }
         exec.command = 'configure';
     }
 }
-exports.CommandValidator = CommandValidator;
 CommandValidator.HELP_COMMAND_TYPES = ['help', '--help', '-h'];
 CommandValidator._args = process.argv.slice(2);
 CommandValidator._executable = {

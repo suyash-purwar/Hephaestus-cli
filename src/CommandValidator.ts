@@ -1,5 +1,5 @@
-import { CommandError } from './errors/CommandError';
-import { Executable } from './interfaces/Executable';
+import { CommandError } from './errors/CommandError.js';
+import { Executable } from './interfaces/Executable.js';
 
 export class CommandValidator {
   private constructor() {}

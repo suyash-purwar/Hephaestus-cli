@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { CommandValidator } from './CommandValidator';
-import { ResponseHandler } from './ResponseHandler';
+import { CommandValidator } from './CommandValidator.js';
+import { ResponseHandler } from './ResponseHandler.js';
 
 try {
   const executable = CommandValidator.validateCommand();

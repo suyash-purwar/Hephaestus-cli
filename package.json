@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Communicate with ChatGPT and DALL-E right through your terminal",
   "main": "./build/app.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -28,7 +29,9 @@
   },
   "homepage": "https://github.com/Suyash-Purwar/Hephaestus-cli#readme",
   "dependencies": {
+    "@types/inquirer": "^9.0.3",
     "@types/node": "^18.11.18",
-    "chalk": "^5.2.0"
+    "chalk": "^5.2.0",
+    "inquirer": "^9.1.4"
   }
 }

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CommandError = void 0;
-class CommandError extends Error {
+export class CommandError extends Error {
     constructor(msg, cmd, unknownCommand) {
         super(msg);
         this._command = cmd;
@@ -21,4 +18,3 @@ class CommandError extends Error {
         return this._unknownCommand;
     }
 }
-exports.CommandError = CommandError;

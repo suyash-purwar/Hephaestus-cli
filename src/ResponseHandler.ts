@@ -1,4 +1,5 @@
-import { Executable } from './interfaces/Executable';
+import inquirer from 'inquirer';
+import { Executable } from './interfaces/Executable.js';
 
 export class ResponseHandler {
   private constructor() {}

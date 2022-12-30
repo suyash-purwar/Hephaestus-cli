@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ResponseHandler = void 0;
-class ResponseHandler {
+import inquirer from 'inquirer';
+export class ResponseHandler {
     constructor() { }
     static routeExecutable(executable) {
         switch (executable.command) {
@@ -34,7 +32,14 @@ heph version                                          shows the currently instal
     }
     static execConfigureCommand() {
         // Inquirer.js processing
+        inquirer
+            .prompt(['Enter the API token'])
+            .then((res) => {
+            console.log(res);
+        })
+            .catch((err) => {
+            console.log(err);
+        });
         return 'Hephaestus is configured';
     }
 }
-exports.ResponseHandler = ResponseHandler;
