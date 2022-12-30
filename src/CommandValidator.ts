@@ -29,10 +29,6 @@ export class CommandValidator {
       case '-a':
         CommandValidator.validateAnswerCommand();
         break;
-      case 'set-token':
-      case '-st':
-        CommandValidator.validateSetTokenCommand();
-        break;
       case 'generate':
       case '-g':
         CommandValidator.validateGenerateCommand();
@@ -109,25 +105,6 @@ export class CommandValidator {
       };
     }
     exec.command = 'answer';
-  }
-
-  static validateSetTokenCommand(): void | never {
-    const exec = CommandValidator._executable;
-    const args = CommandValidator._args;
-    if (args.length > 2) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'set-token', args[2]);
-    }
-    if (!args[1]?.trim()) {
-      throw new CommandError('API_TOKEN_EMPTY', 'set-token');
-    }
-    if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
-      exec.describe = true;
-    } else {
-      exec.data = {
-        query: args[1].trim(),
-      };
-    }
-    exec.command = 'set-token';
   }
 
   static validateGenerateCommand(): void | never {

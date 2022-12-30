@@ -1,17 +1,18 @@
 import inquirer from 'inquirer';
 import { Executable } from './interfaces/Executable.js';
+import { OpenAI } from './apis/OpenAI.js';
 
 export class ResponseHandler {
   private constructor() {}
 
-  static routeExecutable(executable: Executable): string | never {
+  static async routeExecutable(executable: Executable): Promise<void> {
     switch (executable.command) {
       case 'help':
-        return ResponseHandler.execHelpCommand();
+        ResponseHandler.execHelpCommand();
         break;
       // More commands here..
       case 'configure':
-        return ResponseHandler.execConfigureCommand();
+        await ResponseHandler.execConfigureCommand();
         break;
       default:
         throw new Error('COMMAND_NOT_RECOGNIZED');
@@ -19,9 +20,8 @@ export class ResponseHandler {
   }
 
   // Info: Text needs to be updated
-  // Omitted set-token as I think it would be better to set it through inquirer package inside of the configure command
-  static execHelpCommand(): string | never {
-    return `
+  static execHelpCommand(): void {
+    const res = `
 heph <command>
 
 Usage:
@@ -33,10 +33,31 @@ heph configure                                        configures the CLI for use
 heph help                                             shows info about the commands
 heph version                                          shows the currently installed version of the cli
     `;
+    console.log(res);
   }
 
-  static execConfigureCommand(): string | never {
-    // Inquirer.js processing
-    return 'Hephaestus is configured';
+  static async execConfigureCommand(): Promise<void> {
+    const questions = [
+      {
+        type: 'password',
+        name: 'api-token',
+        message: 'Enter the API token',
+        mask: '*',
+      },
+      {
+        type: 'list',
+        name: 'model',
+        message: 'Choose the default AI model',
+        choices: ['code-davinci-002 (best for coders)', 'text-davinci-003'],
+        filter(value: string): string {
+          if (value.includes('(best for coders)')) return 'code-davinci-002';
+          return value;
+        },
+      },
+    ];
+    const response = await inquirer.prompt(questions);
+    const openapi = new OpenAI(response['api-token'], response.model);
+    await openapi.checkValidity();
+    console.log('Hephaestus is configured! Start hacking!');
   }
 }
