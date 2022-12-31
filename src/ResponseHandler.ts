@@ -39,14 +39,21 @@ heph version                                          shows the currently instal
   }
 
   static async execConfigureCommand(): Promise<void> {
+    let hasConfiguredBefore = false;
+    const setTokenQuestion = {
+      type: 'password',
+      name: 'api-token',
+      message: 'Enter the API token:',
+      mask: '*',
+    };
+    const currentConfig = await ConfigHandler.fetchConfig();
+    if (currentConfig) {
+      hasConfiguredBefore = true;
+      setTokenQuestion.message =
+        "Enter the API token (leave empty if you don't want to change):";
+    }
     const questions = [
-      {
-        type: 'password',
-        name: 'api-token',
-        message:
-          "Enter the API token (press enter if you don' want to change):",
-        mask: '*',
-      },
+      setTokenQuestion,
       {
         type: 'list',
         name: 'model',
@@ -59,14 +66,35 @@ heph version                                          shows the currently instal
       },
     ];
     const config: AppConfiguration = await inquirer.prompt(questions);
-    const openapi = new OpenAI(config);
-    await openapi.checkValidity();
-    const currentConfig = await ConfigHandler.fetchConfig();
-    if ('api-token' in currentConfig) {
-      // If config is already written, take permission
-      // Inquirer prompt
+    if (hasConfiguredBefore) {
+      if (config['api-token'].length != 0) {
+        const openapi = new OpenAI(config);
+        await openapi.checkValidity();
+      } else {
+        if (currentConfig) config['api-token'] = currentConfig['api-token'];
+      }
+      // If configuration already exists, take permission for overwrite
+      const confirmation = [
+        {
+          type: 'confirm',
+          name: 'decision',
+          message: 'Are you sure you want to update previous setting?',
+          default: false,
+        },
+      ];
+      const confirmationResult = await inquirer.prompt(confirmation);
+      console.log(confirmationResult);
+      if (confirmationResult.decision) {
+        await ConfigHandler.saveConfig(config);
+        console.log('Settings are updated. Continue hacking!');
+      } else {
+        console.log('Settings not updated.');
+      }
+    } else {
+      const openapi = new OpenAI(config);
+      await openapi.checkValidity();
+      await ConfigHandler.saveConfig(config);
+      console.log('Hephaestus is configured! Start hacking!');
     }
-    await ConfigHandler.saveConfig(config);
-    console.log('Hephaestus is configured! Start hacking!');
   }
 }

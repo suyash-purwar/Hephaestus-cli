@@ -56,11 +56,11 @@ model=${response['model']}`;
     await fs.writeFile(path, content);
   }
 
-  static async fetchConfig(): Promise<AppConfiguration | {}> {
+  static async fetchConfig(): Promise<AppConfiguration | undefined> {
     let path = ConfigHandler.getPath() + '/.hephaestusrc';
     try {
       const data = await fs.readFile(path, 'utf8');
-      if (data.length === 0) return {};
+      if (data.length === 0) return undefined;
       const propVals = data.split('\n').map((prop: string) => {
         return prop.split('=')[1];
       });
@@ -72,7 +72,8 @@ model=${response['model']}`;
     } catch (e: any) {
       switch (e.errno) {
         case -2:
-          throw new Error('CONFIGURATION_NOT_SET_YET');
+          // Return undefined when file does not exist
+          return undefined;
         default:
           console.log(e);
           throw new Error('INTERNAL_UNKNOWN_ERR');

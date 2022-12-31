@@ -10,7 +10,7 @@ import { ResponseHandler } from './ResponseHandler.js';
     await ResponseHandler.routeExecutable(executable);
   } catch (e: any) {
     // console.log(e.name);
-    console.log(e.message);
+    // console.log(e.message);
     // console.log(e.command);
     if (e.unknownCommand) console.log(e.unknownCommand);
   }
