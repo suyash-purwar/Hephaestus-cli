@@ -7,7 +7,7 @@ export class ConfigHandler {
   private constructor() {}
   private static _path: string;
 
-  static async saveConfig(response: AppConfiguration): Promise<void> {
+  static getPath(): string {
     const CONFIG_FOLDER = 'hephaestus';
     switch (os.type()) {
       case 'Darwin':
@@ -17,9 +17,6 @@ export class ConfigHandler {
         } else {
           ConfigHandler._path = process.env.HOME as string;
           ConfigHandler._path += '.config';
-          if (!existsSync(ConfigHandler._path)) {
-            await fs.mkdir('.config');
-          }
         }
         break;
       case 'Windows_NT':
@@ -30,21 +27,40 @@ export class ConfigHandler {
     }
 
     ConfigHandler._path += '/' + CONFIG_FOLDER;
-
-    if (!existsSync(ConfigHandler._path)) {
-      await fs.mkdir(ConfigHandler._path);
-    }
-
-    let content = `apt-token=${response['api-token']}
-model=${response['model']}`;
-
-    ConfigHandler._path += '/.hephaestusrc';
-    await fs.writeFile(ConfigHandler._path, content);
+    return ConfigHandler._path;
   }
 
-  static async fetchConfig(): Promise<AppConfiguration> {
+  static async saveConfig(response: AppConfiguration): Promise<void> {
+    // If OS is Darwin/Linux and process.env.XDG_CONFIG_HOME not set
+    // Save the config in $HOME/.config
+    // Create .config folder if doesn't exist already
+    if (
+      (os.type() === 'Darwin' || os.type() === 'Linux') &&
+      !process.env.XDG_CONFIG_HOME
+    ) {
+      if (!existsSync(ConfigHandler._path)) {
+        await fs.mkdir('.config');
+      }
+    }
+    let path = ConfigHandler.getPath();
+    const content = `apt-token=${response['api-token']}
+model=${response['model']}`;
+
+    // Create hephaestus folder if doesn't exist already
+    if (!existsSync(path)) {
+      await fs.mkdir(path);
+    }
+
+    // Write/Overwrite the config file
+    path += '/.hephaestusrc';
+    await fs.writeFile(path, content);
+  }
+
+  static async fetchConfig(): Promise<AppConfiguration | {}> {
+    let path = ConfigHandler.getPath() + '/.hephaestusrc';
     try {
-      const data = await fs.readFile(ConfigHandler._path, 'utf8');
+      const data = await fs.readFile(path, 'utf8');
+      if (data.length === 0) return {};
       const propVals = data.split('\n').map((prop: string) => {
         return prop.split('=')[1];
       });
@@ -52,7 +68,6 @@ model=${response['model']}`;
         'api-token': propVals[0],
         model: propVals[1],
       };
-      console.log(config);
       return config;
     } catch (e: any) {
       switch (e.errno) {

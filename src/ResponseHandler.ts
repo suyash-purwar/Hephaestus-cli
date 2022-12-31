@@ -43,13 +43,14 @@ heph version                                          shows the currently instal
       {
         type: 'password',
         name: 'api-token',
-        message: 'Enter the API token',
+        message:
+          "Enter the API token (press enter if you don' want to change):",
         mask: '*',
       },
       {
         type: 'list',
         name: 'model',
-        message: 'Choose the default AI model',
+        message: 'Choose the default AI model:',
         choices: ['code-davinci-002 (best for coders)', 'text-davinci-003'],
         filter(value: string): string {
           if (value.includes('(best for coders)')) return 'code-davinci-002';
@@ -60,10 +61,12 @@ heph version                                          shows the currently instal
     const config: AppConfiguration = await inquirer.prompt(questions);
     const openapi = new OpenAI(config);
     await openapi.checkValidity();
+    const currentConfig = await ConfigHandler.fetchConfig();
+    if ('api-token' in currentConfig) {
+      // If config is already written, take permission
+      // Inquirer prompt
+    }
     await ConfigHandler.saveConfig(config);
-    const existing_config = await ConfigHandler.fetchConfig();
-    const openai_test = new OpenAI(existing_config);
-    console.log(existing_config);
     console.log('Hephaestus is configured! Start hacking!');
   }
 }
