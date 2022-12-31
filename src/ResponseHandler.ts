@@ -2,40 +2,59 @@ import inquirer from 'inquirer';
 import { Executable } from './interfaces/Executable.js';
 import { OpenAI } from './apis/OpenAI.js';
 import { ConfigHandler } from './ConfigHandler.js';
-import { AppConfiguration } from './interfaces/AppConfiguration';
+import { AppConfiguration } from './interfaces/AppConfiguration.js';
+import {
+  help,
+  helpConfigure,
+  helpAbout,
+  helpVersion,
+  helpAnswer,
+  helpGenerate,
+} from './utils/helpResponses.js';
 
 export class ResponseHandler {
   private constructor() {}
 
   static async routeExecutable(executable: Executable): Promise<void> {
-    switch (executable.command) {
+    const { command, describe }: { command: string; describe?: boolean } =
+      executable;
+    switch (command) {
       case 'help':
-        ResponseHandler.execHelpCommand();
+        this.execHelpCommand();
         break;
-      // More commands here..
+      case 'about':
+        describe ? this.describeCommand(command) : this.execAboutCommand();
+        break;
+      case 'version':
+        describe ? this.describeCommand(command) : this.execVersionCommand();
+        break;
+      case 'answer':
+        if (executable.data)
+          describe
+            ? this.describeCommand(command)
+            : this.execAnswerCommand(executable.data.query);
+        break;
+      case 'generate':
+        if (executable.data && executable.data.count)
+          describe
+            ? this.describeCommand(command)
+            : this.execGenerateCommand(
+                executable.data.query,
+                executable.data.count
+              );
+        break;
       case 'configure':
-        await ResponseHandler.execConfigureCommand();
+        describe
+          ? this.describeCommand(command)
+          : await this.execConfigureCommand();
         break;
       default:
         throw new Error('COMMAND_NOT_RECOGNIZED');
     }
   }
 
-  // Info: Text needs to be updated
   static execHelpCommand(): void {
-    const res = `
-heph <command>
-
-Usage:
-
-heph answer                                           responds to your messages
-heph generate <image description> [<img count>]       generates images from your textual description
-heph about                                            show info about this CLI tool
-heph configure                                        configures the CLI for use
-heph help                                             shows info about the commands
-heph version                                          shows the currently installed version of the cli
-    `;
-    console.log(res);
+    console.log(help);
   }
 
   static async execConfigureCommand(): Promise<void> {
@@ -95,6 +114,42 @@ heph version                                          shows the currently instal
       await openapi.checkValidity();
       await ConfigHandler.saveConfig(config);
       console.log('Hephaestus is configured! Start hacking!');
+    }
+  }
+
+  static execAboutCommand(): void {
+    // Do some magic
+  }
+
+  static execVersionCommand(): void {
+    console.log('0.1.0');
+  }
+
+  static execAnswerCommand(query: string): void {
+    // Generate answer
+  }
+
+  static execGenerateCommand(query: string, count = 1): void {
+    // Generate images
+  }
+
+  static describeCommand(command: string): void {
+    switch (command) {
+      case 'configure':
+        console.log(helpConfigure);
+        break;
+      case 'about':
+        console.log(helpAbout);
+        break;
+      case 'version':
+        console.log(helpVersion);
+        break;
+      case 'answer':
+        console.log(helpAnswer);
+        break;
+      case 'generate':
+        console.log(helpGenerate);
+        break;
     }
   }
 }
