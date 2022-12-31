@@ -1,15 +1,13 @@
 import { Spinner } from './../utils/Spinner.js';
-import {
-  OpenAIApi,
-  Configuration,
-} from '../../node_modules/openai/dist/index.js';
+import { OpenAIApi, Configuration } from 'openai';
+import { AppConfiguration } from '../interfaces/AppConfiguration.js';
 
 export class OpenAI {
   private _openai: OpenAIApi;
 
-  constructor(apiToken: string, model: string) {
+  constructor(appConfig: AppConfiguration) {
     const configuration = new Configuration({
-      apiKey: apiToken,
+      apiKey: appConfig['api-token'],
     });
     this._openai = new OpenAIApi(configuration);
   }

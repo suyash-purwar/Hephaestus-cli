@@ -1,6 +1,8 @@
 import inquirer from 'inquirer';
 import { Executable } from './interfaces/Executable.js';
 import { OpenAI } from './apis/OpenAI.js';
+import { ConfigHandler } from './ConfigHandler.js';
+import { AppConfiguration } from './interfaces/AppConfiguration';
 
 export class ResponseHandler {
   private constructor() {}
@@ -55,9 +57,13 @@ heph version                                          shows the currently instal
         },
       },
     ];
-    const response = await inquirer.prompt(questions);
-    const openapi = new OpenAI(response['api-token'], response.model);
+    const config: AppConfiguration = await inquirer.prompt(questions);
+    const openapi = new OpenAI(config);
     await openapi.checkValidity();
+    await ConfigHandler.saveConfig(config);
+    const existing_config = await ConfigHandler.fetchConfig();
+    const openai_test = new OpenAI(existing_config);
+    console.log(existing_config);
     console.log('Hephaestus is configured! Start hacking!');
   }
 }
