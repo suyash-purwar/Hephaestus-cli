@@ -38,7 +38,7 @@ export class ConfigHandler {
       (os.type() === 'Darwin' || os.type() === 'Linux') &&
       !process.env.XDG_CONFIG_HOME
     ) {
-      if (!existsSync(ConfigHandler._path)) {
+      if (!existsSync(process.env.HOME + '/.config')) {
         await fs.mkdir('.config');
       }
     }

@@ -32,8 +32,14 @@
     "@types/inquirer": "^9.0.3",
     "@types/node": "^18.11.18",
     "chalk": "^5.2.0",
+    "gradient-string": "^2.0.2",
     "inquirer": "^9.1.4",
+    "node-emoji": "^1.11.0",
     "openai": "^3.1.0",
     "ora": "^6.1.2"
+  },
+  "devDependencies": {
+    "@types/gradient-string": "^1.1.2",
+    "@types/node-emoji": "^1.8.2"
   }
 }
