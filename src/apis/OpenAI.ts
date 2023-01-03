@@ -51,22 +51,4 @@ export class OpenAI {
       }
     }
   }
-
-  async getImageResponse(query: string, count: number): Promise<string[]> {
-    try {
-      const response = await this._openai.createImage({
-        prompt: query,
-        n: count,
-        size: '512x512',
-      });
-      const urls = response.data.data.map((obj) => obj.url) as string[];
-      return urls;
-    } catch (e: any) {
-      switch (e.message) {
-        default:
-          console.log(e.message);
-          throw new Error('OPENAI_SERVICE_DOWN');
-      }
-    }
-  }
 }

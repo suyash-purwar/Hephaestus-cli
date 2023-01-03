@@ -10,7 +10,6 @@ import {
   helpAbout,
   helpVersion,
   helpAnswer,
-  helpGenerate,
 } from './utils/helpResponses.js';
 import { Stylize } from './utils/Stylize.js';
 
@@ -37,16 +36,6 @@ export class ResponseHandler {
           this.describeCommand(command);
         } else if (executable.data) {
           await this.execAnswerCommand(executable.data.query);
-        }
-        break;
-      case 'generate':
-        if (describe) {
-          this.describeCommand(command);
-        } else if (executable.data) {
-          await this.execGenerateCommand(
-            executable.data.query,
-            executable.data.count
-          );
         }
         break;
       case 'configure':
@@ -171,14 +160,6 @@ export class ResponseHandler {
     console.log(Stylize.info(response));
   }
 
-  static async execGenerateCommand(query: string, count = 1): Promise<void> {
-    const config = await ConfigHandler.fetchConfig();
-    if (!config) throw new Error('CONFIGURATION_NOT_SET');
-    const openai = new OpenAI(config);
-    const response = await openai.getImageResponse(query, count);
-    console.log(response);
-  }
-
   static describeCommand(command: string): void {
     switch (command) {
       case 'configure':
@@ -192,9 +173,6 @@ export class ResponseHandler {
         break;
       case 'answer':
         console.log(Stylize.flatInfo(helpAnswer));
-        break;
-      case 'generate':
-        console.log(Stylize.flatInfo(helpGenerate));
         break;
     }
   }

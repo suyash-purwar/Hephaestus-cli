@@ -29,10 +29,6 @@ export class CommandValidator {
       case '-a':
         CommandValidator.validateAnswerCommand();
         break;
-      case 'generate':
-      case '-g':
-        CommandValidator.validateGenerateCommand();
-        break;
       case 'configure':
       case '-c':
         CommandValidator.validateConfigureCommand();
@@ -105,35 +101,6 @@ export class CommandValidator {
       };
     }
     exec.command = 'answer';
-  }
-
-  static validateGenerateCommand(): void | never {
-    const exec = CommandValidator._executable;
-    const args = CommandValidator._args;
-    if (args.length > 3) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'generate', args[3]);
-    }
-    if (!args[1]?.trim()) {
-      throw new CommandError('ENCOUNTER_LESSER_ARGS', 'generate');
-    }
-    if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
-      exec.describe = true;
-    } else {
-      exec.data = {
-        query: args[1].trim(),
-      };
-      if (+args[2]?.trim()) {
-        if (+args[2] > 10 || +args[2] < 0) {
-          throw new CommandError('OUT_OF_IMG_GEN_LIMIT', 'generate');
-        }
-        exec.data.count = +args[2];
-      } else {
-        if (args[2] != undefined) {
-          throw new CommandError('ENCOUNTERED_NON_NUMERIC_VALUE', 'generate');
-        }
-      }
-    }
-    exec.command = 'generate';
   }
 
   static validateConfigureCommand(): void | never {

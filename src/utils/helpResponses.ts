@@ -4,7 +4,6 @@ heph <command>
 Usage:
 
 heph answer                                   responds to your messages
-heph generate <description> [<count>]         generates image(s) from textual description and image count
 heph about                                    show info about this CLI tool
 heph configure                                configures the CLI for use
 heph help                                     shows info about the commands
@@ -41,11 +40,3 @@ Usage:
 heph answer <question>
 
 aliases: answer, -v`;
-
-export const helpGenerate = `
-Generates image(s) from textual description and image count
-
-Usage:
-heph generate <description> [<img count>]
-
-aliases: generate, -g`;
