@@ -29,8 +29,6 @@
   },
   "homepage": "https://github.com/Suyash-Purwar/Hephaestus-cli#readme",
   "dependencies": {
-    "@types/inquirer": "^9.0.3",
-    "@types/node": "^18.11.18",
     "chalk": "^5.2.0",
     "gradient-string": "^2.0.2",
     "inquirer": "^9.1.4",
@@ -40,6 +38,8 @@
   },
   "devDependencies": {
     "@types/gradient-string": "^1.1.2",
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^18.11.18",
     "@types/node-emoji": "^1.8.2"
   }
 }

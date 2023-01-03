@@ -3,17 +3,19 @@ import nodeEmoji from 'node-emoji';
 
 export class Stylize {
   static success(...args: string[]) {
-    return `${nodeEmoji.get('white_check_mark')} ${chalk.bold.green(
+    return `${nodeEmoji.get('white_check_mark')} ${chalk.bold.greenBright(
       args.join(' ')
     )}`;
   }
 
   static info(...args: string[]) {
-    return `${nodeEmoji.get('point_right')} ${chalk.bold.cyan(args.join(' '))}`;
+    return `${nodeEmoji.get('robot_face')} ${chalk.bold.cyanBright(
+      args.join(' ')
+    )}`;
   }
 
   static flatInfo(...args: string[]) {
-    return chalk.cyan(args.join(' '));
+    return chalk.cyanBright(args.join(' '));
   }
 
   static error(...args: string[]) {

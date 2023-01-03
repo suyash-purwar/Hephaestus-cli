@@ -25,7 +25,9 @@ export class ResponseHandler {
         this.execHelpCommand();
         break;
       case 'about':
-        describe ? this.describeCommand(command) : this.execAboutCommand();
+        describe
+          ? this.describeCommand(command)
+          : await this.execAboutCommand();
         break;
       case 'version':
         describe ? this.describeCommand(command) : this.execVersionCommand();
@@ -34,14 +36,14 @@ export class ResponseHandler {
         if (describe) {
           this.describeCommand(command);
         } else if (executable.data) {
-          this.execAnswerCommand(executable.data.query);
+          await this.execAnswerCommand(executable.data.query);
         }
         break;
       case 'generate':
         if (describe) {
           this.describeCommand(command);
         } else if (executable.data) {
-          this.execGenerateCommand(
+          await this.execGenerateCommand(
             executable.data.query,
             executable.data.count
           );
@@ -120,7 +122,8 @@ export class ResponseHandler {
     }
   }
 
-  static execAboutCommand(): void {
+  static async execAboutCommand(): Promise<void> {
+    const config = await ConfigHandler.fetchConfig();
     const headline = `
 
     | |  | |          | |                   | |             
@@ -135,10 +138,18 @@ export class ResponseHandler {
     console.log(gradient.fruit(headline));
     console.log(
       gradient.fruit(
-        `Hephaestus is a cli-based tool which allows you to easily find answers to any questions which could range from your next React.js project to the nature of this universe.\nIt interanally uses OpenAI's text-davinci-003/text-davinci-002 model for generating textual responses and DALL-E 2 model for image generation.
-        \nTo use this tool, firstly you'll have to configure it on your system. Run 'heph configure' to start the configuration process.
-        \nRun 'npm help' to see the full set of commands.`
+        `Hephaestus is a cli-based tool which allows you to easily find answers to any questions which could range from your next React.js project to the nature of this universe.\nIt interanally uses OpenAI's text-davinci-003/text-davinci-002 model for generating textual responses and DALL-E 2 model for image generation.`
       )
+    );
+    if (!config) {
+      console.log(
+        gradient.fruit(
+          `\nTo use this tool, firstly you'll have to configure it on your system. Run 'heph configure' to start the configuration process.`
+        )
+      );
+    }
+    console.log(
+      gradient.fruit(`\nRun 'npm help' to see the full set of commands.`)
     );
     console.log(
       gradient.cristal(
@@ -152,12 +163,20 @@ export class ResponseHandler {
     console.log(Stylize.flatInfo('Version: 0.1.0'));
   }
 
-  static execAnswerCommand(query: string): void {
-    // Generate answer
+  static async execAnswerCommand(query: string): Promise<void> {
+    const config = await ConfigHandler.fetchConfig();
+    if (!config) throw new Error('CONFIGURATION_NOT_SET');
+    const openai = new OpenAI(config);
+    const response = await openai.getTextualResponse(query);
+    console.log(Stylize.info(response));
   }
 
-  static execGenerateCommand(query: string, count = 1): void {
-    // Generate images
+  static async execGenerateCommand(query: string, count = 1): Promise<void> {
+    const config = await ConfigHandler.fetchConfig();
+    if (!config) throw new Error('CONFIGURATION_NOT_SET');
+    const openai = new OpenAI(config);
+    const response = await openai.getImageResponse(query, count);
+    console.log(response);
   }
 
   static describeCommand(command: string): void {
