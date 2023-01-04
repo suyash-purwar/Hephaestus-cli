@@ -34,6 +34,8 @@ export class OpenAI {
   }
 
   async getTextualResponse(query: string): Promise<string> {
+    const spinner = new Spinner('Generating response...');
+    spinner.start();
     try {
       const response = await this._openai.createCompletion({
         model: this._model,
@@ -42,8 +44,10 @@ export class OpenAI {
         temperature: 0,
         top_p: 1,
       });
+      spinner.stop();
       return response.data.choices[0].text as string;
     } catch (e: any) {
+      spinner.stop();
       switch (e.response.status) {
         case 401:
           throw new Error('INVALID_TOKEN');

@@ -7,12 +7,8 @@ import { Stylize } from './utils/Stylize.js';
 (async function () {
   try {
     const executable = CommandValidator.validateCommand();
-    // console.log(executable);
     await ResponseHandler.routeExecutable(executable);
   } catch (e: any) {
-    // console.log(e.name);
-    // console.log(e.message);
-    // console.log(e.command);
     switch (e.message) {
       case 'UNKNOWN_COMMAND':
         console.log(
