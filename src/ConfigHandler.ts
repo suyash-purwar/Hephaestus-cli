@@ -74,9 +74,6 @@ model=${response['model']}`;
         case -2:
           // Return undefined when file does not exist
           return undefined;
-        default:
-          console.log(e);
-          throw new Error('INTERNAL_UNKNOWN_ERR');
       }
     }
   }

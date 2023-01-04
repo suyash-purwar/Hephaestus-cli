@@ -44,7 +44,9 @@ export class OpenAI {
       });
       return response.data.choices[0].text as string;
     } catch (e: any) {
-      switch (e.message) {
+      switch (e.response.status) {
+        case 401:
+          throw new Error('INVALID_TOKEN');
         default:
           console.log(e.message);
           throw new Error('OPENAI_SERVICE_DOWN');

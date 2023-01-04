@@ -37,7 +37,7 @@ export class CommandValidator {
         throw new CommandError(
           'UNKNOWN_COMMAND',
           undefined,
-          CommandValidator._args[1]
+          CommandValidator._args[0]
         );
     }
     return CommandValidator._executable;
