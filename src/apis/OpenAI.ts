@@ -26,6 +26,8 @@ export class OpenAI {
       switch (e.response.status) {
         case 401:
           throw new Error('INVALID_TOKEN');
+        case 429:
+          throw new Error('INTERNAL_DEPENDENCY_BUSY');
         default:
           console.log(e.response.status);
           throw new Error('OPENAI_SERVICE_DOWN');
@@ -51,6 +53,9 @@ export class OpenAI {
       switch (e.response.status) {
         case 401:
           throw new Error('INVALID_TOKEN');
+        case 429:
+          // @todo Implement exponential backoff algorithm
+          throw new Error('INTERNAL_DEPENDENCY_BUSY');
         default:
           console.log(e.message);
           throw new Error('OPENAI_SERVICE_DOWN');

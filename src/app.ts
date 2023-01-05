@@ -25,7 +25,9 @@ import { Stylize } from './utils/Stylize.js';
         );
         break;
       case 'EMPTY_QUERY':
-        console.log('Query parameter is empty. Please pass the query.');
+        console.log(
+          Stylize.error('Query parameter is empty. Please pass the query.')
+        );
         break;
       case 'INVALID_TOKEN':
         console.log(
@@ -45,6 +47,15 @@ import { Stylize } from './utils/Stylize.js';
             `Hephaestus is not configure yet. Run 'heph configure' to configure.`
           )
         );
+      case 'PLATFORM_NOT_SUPPORTED':
+        console.log(
+          Stylize.error('Hephaestus is not supported for your application.')
+        );
+        break;
+      case 'INTERNAL_DEPENDENCY_BUSY':
+        // @todo This will be removed. Will be resolved by exponential backoff algorithm
+        console.log('Internal dependency is busy');
+        break;
       default:
         console.log(
           Stylize.error(
