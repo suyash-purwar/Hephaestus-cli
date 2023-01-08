@@ -16,7 +16,7 @@ export class ConfigHandler {
           ConfigHandler._path = process.env.XDG_CONFIG_HOME;
         } else {
           ConfigHandler._path = process.env.HOME as string;
-          ConfigHandler._path += '.config';
+          ConfigHandler._path += '/.config';
         }
         break;
       case 'Windows_NT':
