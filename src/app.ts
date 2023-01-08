@@ -47,6 +47,7 @@ import { Stylize } from './utils/Stylize.js';
             `Hephaestus is not configure yet. Run 'heph configure' to configure.`
           )
         );
+        break;
       case 'PLATFORM_NOT_SUPPORTED':
         console.log(
           Stylize.error('Hephaestus is not supported for your application.')
