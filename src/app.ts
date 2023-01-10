@@ -44,7 +44,7 @@ import { Stylize } from './utils/Stylize.js';
       case 'CONFIGURATION_NOT_SET':
         console.log(
           Stylize.error(
-            `Hephaestus is not configure yet. Run 'heph configure' to configure.`
+            `Hephaestus is not configured yet. Run 'heph configure' to configure.`
           )
         );
         break;
@@ -54,8 +54,11 @@ import { Stylize } from './utils/Stylize.js';
         );
         break;
       case 'INTERNAL_DEPENDENCY_BUSY':
-        // @todo This will be removed. Will be resolved by exponential backoff algorithm
-        console.log('Internal dependency is busy');
+        console.log(
+          Stylize.error(
+            'Hephaestus has received too many requests in a short span of time. Try after a short span of time.'
+          )
+        );
         break;
       default:
         console.log(e);

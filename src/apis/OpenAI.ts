@@ -54,7 +54,6 @@ export class OpenAI {
         case 401:
           throw new Error('INVALID_TOKEN');
         case 429:
-          // @todo Implement exponential backoff algorithm
           throw new Error('INTERNAL_DEPENDENCY_BUSY');
         default:
           console.log(e.message);

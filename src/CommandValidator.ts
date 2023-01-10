@@ -53,9 +53,9 @@ export class CommandValidator {
 
   private static validateAboutCommand(): void {
     if (this._args.length > 2) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', this._args[1]);
+      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', this._args[2]);
     }
-    if (this._args.length != 1) {
+    if (this._args[1]) {
       if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
         this._executable.describe = true;
       } else {
@@ -67,9 +67,9 @@ export class CommandValidator {
 
   private static validateVersionCommand(): void {
     if (this._args.length > 2) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'version', this._args[1]);
+      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'version', this._args[2]);
     }
-    if (this._args.length != 1) {
+    if (this._args[1]) {
       if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
         this._executable.describe = true;
       } else {
@@ -101,13 +101,10 @@ export class CommandValidator {
       throw new CommandError(
         'ENCOUNTER_EXTRA_ARGS',
         'configure',
-        this._args[1]
+        this._args[2]
       );
     }
-    /**
-     * Review code at 111 and 105
-     */
-    if (this._args.length != 1) {
+    if (this._args[1]) {
       if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
         this._executable.describe = true;
       } else {
