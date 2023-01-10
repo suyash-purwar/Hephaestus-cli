@@ -1,3 +1,7 @@
+/**
+ * Refactor the code
+ */
+
 export const help = `
 heph <command>
 
@@ -16,6 +20,15 @@ Usage:
 heph configure
 
 aliases: configure, -c`;
+
+export const helpConfigInfo = `
+Shows configuration status and settings
+
+Usgae:
+heph config-info
+
+aliases: config-info, -ci
+`;
 
 export const helpAbout = `
 Shows info about the cli

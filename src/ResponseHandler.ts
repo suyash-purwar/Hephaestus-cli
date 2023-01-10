@@ -43,6 +43,11 @@ export class ResponseHandler {
           ? this.describeCommand(command)
           : await this.execConfigureCommand();
         break;
+      case 'config-info':
+        describe
+          ? this.describeCommand(command)
+          : await this.execConfigInfoCommand();
+        break;
       default:
         throw new Error('COMMAND_NOT_RECOGNIZED');
     }
@@ -158,6 +163,10 @@ export class ResponseHandler {
     const openai = new OpenAI(config);
     const response = await openai.getTextualResponse(query);
     console.log(Stylize.info(response));
+  }
+
+  static async execConfigInfoCommand(): Promise<void> {
+    console.log('done');
   }
 
   static describeCommand(command: string): void {

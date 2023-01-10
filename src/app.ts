@@ -58,6 +58,7 @@ import { Stylize } from './utils/Stylize.js';
         console.log('Internal dependency is busy');
         break;
       default:
+        console.log(e);
         console.log(
           Stylize.error(
             'Internal server error. Please raise an issue on github.'

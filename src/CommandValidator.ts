@@ -6,116 +6,132 @@ export class CommandValidator {
 
   private static HELP_COMMAND_TYPES = ['help', '--help', '-h'];
   private static _args: string[] = process.argv.slice(2);
+
   private static _executable: Executable = {
-    command: CommandValidator._args[0],
+    command: this._args[0],
   };
 
   static validateCommand(): Executable | never {
-    switch (CommandValidator._executable.command) {
+    switch (this._executable.command) {
       case undefined:
       case 'help':
       case '-h':
-        CommandValidator.validateHelpCommand();
+        this.validateHelpCommand();
         break;
       case 'about':
       case '-ab':
-        CommandValidator.validateAboutCommand();
+        this.validateAboutCommand();
         break;
       case 'version':
       case '-v':
-        CommandValidator.validateVersionCommand();
+        this.validateVersionCommand();
         break;
       case 'answer':
       case '-a':
-        CommandValidator.validateAnswerCommand();
+        this.validateAnswerCommand();
         break;
       case 'configure':
       case '-c':
-        CommandValidator.validateConfigureCommand();
+        this.validateConfigureCommand();
+        break;
+      case 'config-info':
+      case '-ci':
+        this.validateConfigInfoCommand();
         break;
       default:
-        throw new CommandError(
-          'UNKNOWN_COMMAND',
-          undefined,
-          CommandValidator._args[0]
-        );
+        throw new CommandError('UNKNOWN_COMMAND', undefined, this._args[0]);
     }
-    return CommandValidator._executable;
+    return this._executable;
   }
 
-  static validateHelpCommand(): void | never {
-    const exec = CommandValidator._executable;
-    const args = CommandValidator._args;
-    if (args.length > 1) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'help', args[1]);
+  private static validateHelpCommand(): void {
+    if (this._args.length > 1) {
+      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'help', this._args[1]);
     }
-    exec.command = 'help';
+    this._executable.command = 'help';
   }
 
-  static validateAboutCommand(): void | never {
-    const exec = CommandValidator._executable;
-    const args = CommandValidator._args;
-    if (args.length > 2) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[1]);
+  private static validateAboutCommand(): void {
+    if (this._args.length > 2) {
+      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', this._args[1]);
     }
-    if (args.length != 1) {
-      if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
-        exec.describe = true;
+    if (this._args.length != 1) {
+      if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
+        this._executable.describe = true;
       } else {
-        throw new CommandError('UNKNOWN_COMMAND', 'about', args[1]);
+        throw new CommandError('UNKNOWN_COMMAND', 'about', this._args[1]);
       }
     }
-    exec.command = 'about';
+    this._executable.command = 'about';
   }
 
-  static validateVersionCommand(): void | never {
-    const exec = CommandValidator._executable;
-    const args = CommandValidator._args;
-    if (args.length > 2) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'version', args[1]);
+  private static validateVersionCommand(): void {
+    if (this._args.length > 2) {
+      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'version', this._args[1]);
     }
-    if (args.length != 1) {
-      if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
-        exec.describe = true;
+    if (this._args.length != 1) {
+      if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
+        this._executable.describe = true;
       } else {
-        throw new CommandError('UNKNOWN_COMMAND', 'version', args[1]);
+        throw new CommandError('UNKNOWN_COMMAND', 'version', this._args[1]);
       }
     }
-    exec.command = 'version';
+    this._executable.command = 'version';
   }
 
-  static validateAnswerCommand(): void | never {
-    const exec = CommandValidator._executable;
-    const args = CommandValidator._args;
-    if (args.length > 2) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', args[2]);
+  private static validateAnswerCommand(): void {
+    if (this._args.length > 2) {
+      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', this._args[2]);
     }
-    if (!args[1]?.trim()) {
+    if (!this._args[1]?.trim()) {
       throw new CommandError('EMPTY_QUERY', 'answer');
     }
-    if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
-      exec.describe = true;
+    if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
+      this._executable.describe = true;
     } else {
-      exec.data = {
-        query: args[1].trim(),
+      this._executable.data = {
+        query: this._args[1].trim(),
       };
     }
-    exec.command = 'answer';
+    this._executable.command = 'answer';
   }
 
-  static validateConfigureCommand(): void | never {
-    const exec = CommandValidator._executable;
-    const args = CommandValidator._args;
-    if (args.length > 2) {
-      throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'configure', args[1]);
+  private static validateConfigureCommand(): void {
+    if (this._args.length > 2) {
+      throw new CommandError(
+        'ENCOUNTER_EXTRA_ARGS',
+        'configure',
+        this._args[1]
+      );
     }
-    if (args.length != 1) {
-      if (CommandValidator.HELP_COMMAND_TYPES.includes(args[1])) {
-        exec.describe = true;
+    /**
+     * Review code at 111 and 105
+     */
+    if (this._args.length != 1) {
+      if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
+        this._executable.describe = true;
       } else {
-        throw new CommandError('UNKNOWN_COMMAND', 'configure', args[1]);
+        throw new CommandError('UNKNOWN_COMMAND', 'configure', this._args[1]);
       }
     }
-    exec.command = 'configure';
+    this._executable.command = 'configure';
+  }
+
+  static validateConfigInfoCommand(): void {
+    if (this._args.length > 2) {
+      throw new CommandError(
+        'ENCOUNTER_EXTRA_ARGS',
+        'config-info',
+        this._args[2]
+      );
+    }
+    if (this._args[1]) {
+      if (this.HELP_COMMAND_TYPES.includes(this._args[1])) {
+        this._executable.describe = true;
+      } else {
+        throw new CommandError('UNKNOWN_COMMAND', 'config-info', this._args[1]);
+      }
+    }
+    this._executable.command = 'config-info';
   }
 }
