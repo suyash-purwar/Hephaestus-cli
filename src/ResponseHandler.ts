@@ -4,13 +4,7 @@ import { Executable } from './interfaces/Executable.js';
 import { OpenAI } from './apis/OpenAI.js';
 import { ConfigHandler } from './ConfigHandler.js';
 import { AppConfiguration } from './interfaces/AppConfiguration.js';
-import {
-  help,
-  helpConfigure,
-  helpAbout,
-  helpVersion,
-  helpAnswer,
-} from './utils/helpResponses.js';
+import { Help } from './utils/Help.js';
 import { Stylize } from './utils/Stylize.js';
 
 export class ResponseHandler {
@@ -53,11 +47,11 @@ export class ResponseHandler {
     }
   }
 
-  static execHelpCommand(): void {
-    console.log(Stylize.flatInfo(help));
+  private static execHelpCommand(): void {
+    console.log(Stylize.flatInfo(Help.help));
   }
 
-  static async execConfigureCommand(): Promise<void> {
+  private static async execConfigureCommand(): Promise<void> {
     let hasConfiguredBefore = false;
     const setTokenQuestion = {
       type: 'password',
@@ -116,7 +110,7 @@ export class ResponseHandler {
     }
   }
 
-  static async execAboutCommand(): Promise<void> {
+  private static async execAboutCommand(): Promise<void> {
     const config = await ConfigHandler.fetchConfig();
     const headline = `
 
@@ -153,11 +147,11 @@ export class ResponseHandler {
     console.log(Stylize.success(`Let's start hacking`));
   }
 
-  static execVersionCommand(): void {
+  private static execVersionCommand(): void {
     console.log(Stylize.flatInfo('Version: 0.1.0'));
   }
 
-  static async execAnswerCommand(query: string): Promise<void> {
+  private static async execAnswerCommand(query: string): Promise<void> {
     const config = await ConfigHandler.fetchConfig();
     if (!config) throw new Error('CONFIGURATION_NOT_SET');
     const openai = new OpenAI(config);
@@ -165,23 +159,35 @@ export class ResponseHandler {
     console.log(Stylize.info(response));
   }
 
-  static async execConfigInfoCommand(): Promise<void> {
-    console.log('done');
+  private static async execConfigInfoCommand(): Promise<void> {
+    const config = await ConfigHandler.fetchConfig();
+    if (config) {
+      console.log(Stylize.flatInfo('Configuraton Status: Configured'));
+      console.log(Stylize.flatInfo(`Default AI Model: ${config.model}`));
+    } else {
+      console.log(Stylize.flatInfo('Configuraton Status: Not configured'));
+      console.log(
+        Stylize.flatInfo(`\nRun 'heph configure' to configure the app.`)
+      );
+    }
   }
 
-  static describeCommand(command: string): void {
+  private static describeCommand(command: string): void {
     switch (command) {
       case 'configure':
-        console.log(Stylize.flatInfo(helpConfigure));
+        console.log(Stylize.flatInfo(Help.helpConfigure));
         break;
       case 'about':
-        console.log(Stylize.flatInfo(helpAbout));
+        console.log(Stylize.flatInfo(Help.helpAbout));
         break;
       case 'version':
-        console.log(Stylize.flatInfo(helpVersion));
+        console.log(Stylize.flatInfo(Help.helpVersion));
         break;
       case 'answer':
-        console.log(Stylize.flatInfo(helpAnswer));
+        console.log(Stylize.flatInfo(Help.helpAnswer));
+        break;
+      case 'config-info':
+        console.log(Stylize.flatInfo(Help.helpConfigInfo));
         break;
     }
   }
