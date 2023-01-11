@@ -29,7 +29,10 @@ export class ResponseHandler {
         if (describe) {
           this.describeCommand(command);
         } else if (executable.data) {
-          await this.execAnswerCommand(executable.data.query);
+          await this.execAnswerCommand(
+            executable.data.query,
+            executable.responseType
+          );
         }
         break;
       case 'configure':
@@ -151,9 +154,17 @@ export class ResponseHandler {
     console.log(Stylize.flatInfo('Version: 0.1.0'));
   }
 
-  private static async execAnswerCommand(query: string): Promise<void> {
+  private static async execAnswerCommand(
+    query: string,
+    responseType?: string
+  ): Promise<void> {
     const config = await ConfigHandler.fetchConfig();
     if (!config) throw new Error('CONFIGURATION_NOT_SET');
+    if (responseType) {
+      responseType === 'code'
+        ? (config.model = 'code-davinci-002')
+        : (config.model = 'text-davinci-003');
+    }
     const openai = new OpenAI(config);
     const response = await openai.getTextualResponse(query);
     console.log(Stylize.info(response));

@@ -10,37 +10,29 @@ export class CommandValidator {
   private static command = this._args[0];
 
   static validateCommand(): Executable {
-    let executable: Executable;
     switch (this.command) {
       case undefined:
       case 'help':
       case '-h':
-        executable = this.validateHelpCommand();
-        break;
+        return this.validateHelpCommand();
       case 'about':
       case '-ab':
-        executable = this.validateAboutCommand();
-        break;
+        return this.validateAboutCommand();
       case 'version':
       case '-v':
-        executable = this.validateVersionCommand();
-        break;
+        return this.validateVersionCommand();
       case 'answer':
       case '-a':
-        executable = this.validateAnswerCommand();
-        break;
+        return this.validateAnswerCommand();
       case 'configure':
       case '-c':
-        executable = this.validateConfigureCommand();
-        break;
+        return this.validateConfigureCommand();
       case 'config-info':
       case '-ci':
-        executable = this.validateConfigInfoCommand();
-        break;
+        return this.validateConfigInfoCommand();
       default:
         throw new CommandError('UNKNOWN_COMMAND', undefined, this._args[0]);
     }
-    return executable;
   }
 
   private static validateHelpCommand(): Executable {
@@ -88,9 +80,6 @@ export class CommandValidator {
   }
 
   private static validateAnswerCommand(): Executable {
-    /**
-     * Implement additional flag (--code/--text Aliases: -c/-t)
-     */
     if (this._args.length > 3) {
       throw new CommandError('ENCOUNTER_EXTRA_ARGS', 'about', this._args[3]);
     }
@@ -127,8 +116,8 @@ export class CommandValidator {
       if (!flagOptions.includes(flag)) {
         throw new CommandError('INVALID_FLAG', 'answer', flag);
       }
-      console.log(flag);
-      executable.responseType = flag;
+      executable.responseType =
+        flag === '-t' || flag === '--text' ? 'text' : 'code';
     }
 
     return executable;
@@ -155,7 +144,7 @@ export class CommandValidator {
     return executable;
   }
 
-  static validateConfigInfoCommand(): Executable {
+  private static validateConfigInfoCommand(): Executable {
     if (this._args.length > 2) {
       throw new CommandError(
         'ENCOUNTER_EXTRA_ARGS',
