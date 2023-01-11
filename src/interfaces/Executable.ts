@@ -4,4 +4,5 @@ export interface Executable {
     query: string;
   };
   describe?: boolean;
+  responseType?: string;
 }

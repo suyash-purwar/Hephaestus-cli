@@ -7,7 +7,8 @@ import { Stylize } from './utils/Stylize.js';
 (async function () {
   try {
     const executable = CommandValidator.validateCommand();
-    await ResponseHandler.routeExecutable(executable);
+    // await ResponseHandler.routeExecutable(executable);
+    console.log(executable);
   } catch (e: any) {
     switch (e.message) {
       case 'UNKNOWN_COMMAND':
@@ -27,6 +28,18 @@ import { Stylize } from './utils/Stylize.js';
       case 'EMPTY_QUERY':
         console.log(
           Stylize.error('Query parameter is empty. Please pass the query.')
+        );
+        break;
+      case 'INVALID_FLAG':
+        console.log(
+          Stylize.error(
+            `Flag ${e.unknownCommand} is invalid. Use --code or --text.`
+          )
+        );
+        break;
+      case 'OPTION_NOT_RECOGNIZED':
+        console.log(
+          Stylize.error(`Option ${e.unknownCommand} not recognized.`)
         );
         break;
       case 'INVALID_TOKEN':
