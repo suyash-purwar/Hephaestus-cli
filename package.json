@@ -1,12 +1,13 @@
 {
   "name": "@ashnov/hephaestus-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Your AI powered CLI-based coding assistant. Powered by OpenAI davinci models.",
   "main": "./build/app.js",
   "type": "module",
   "scripts": {
     "start:dev": "tsc -w",
-    "start:prod": "tsc"
+    "start:prod": "tsc",
+    "postinstall": "heph -ab"
   },
   "repository": {
     "type": "git",
