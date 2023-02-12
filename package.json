@@ -1,11 +1,12 @@
 {
-  "name": "hephaestus-cli",
-  "version": "1.0.0",
-  "description": "Communicate with ChatGPT and DALL-E right through your terminal",
+  "name": "@ashnov/hephaestus-cli",
+  "version": "0.2.0",
+  "description": "Your AI powered CLI-based coding assistant. Powered by OpenAI davinci models.",
   "main": "./build/app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:dev": "tsc -w",
+    "start:prod": "tsc"
   },
   "repository": {
     "type": "git",
@@ -34,8 +35,7 @@
     "inquirer": "^9.1.4",
     "node-emoji": "^1.11.0",
     "openai": "^3.1.0",
-    "ora": "^6.1.2",
-    "typescript": "^4.9.4"
+    "ora": "^6.1.2"
   },
   "devDependencies": {
     "@types/gradient-string": "^1.1.2",

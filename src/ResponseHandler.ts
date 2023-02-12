@@ -151,7 +151,7 @@ export class ResponseHandler {
   }
 
   private static execVersionCommand(): void {
-    console.log(Stylize.flatInfo('Version: 0.1.0'));
+    console.log(Stylize.flatInfo('Version: 0.2.0'));
   }
 
   private static async execAnswerCommand(
