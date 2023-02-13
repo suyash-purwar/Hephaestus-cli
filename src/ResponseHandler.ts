@@ -129,7 +129,7 @@ export class ResponseHandler {
     console.log(gradient.fruit(headline));
     console.log(
       gradient.fruit(
-        `Hephaestus is a cli-based tool which allows you to easily find answers to any questions which could range from your next React.js project to the nature of this universe.\nIt interanally uses OpenAI's text-davinci-003/code-davinci-002 model for generating textual responses.`
+        `Hephaestus is an AI-powered CLI tool which allows you to easily find answers to any questions ranging from that stubborn error to the nature of this universe.\nIt interanally uses OpenAI's text-davinci-003 and code-davinci-002 model for generating responses.`
       )
     );
     if (!config) {
